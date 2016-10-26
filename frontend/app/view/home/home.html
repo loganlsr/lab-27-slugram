@@ -1,0 +1,13 @@
+<main class="home">
+  <h1>Hitting Home Page</h1>
+  <create-gallery></create-gallery>
+  <ul>
+    <li ng-repeat="gallery in homeCtrl.galleries">
+      <p> {{gallery.name}} </p>
+      <p> {{gallery.desc}} </p>
+      <p> {{gallery._id}} </p>
+      <button ng-click="delete">Delete</button>
+      
+    </li>
+  </ul>
+</main>
