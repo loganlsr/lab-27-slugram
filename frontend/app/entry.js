@@ -4,7 +4,7 @@
 require('./scss/main.scss');
 
 // require node modules
-const path = require('path'); 
+const path = require('path');
 
 // require npm modules
 const angular = require('angular');
@@ -22,8 +22,8 @@ const demoApp = angular.module('demoApp', [ngTouch, ngAnimate, uiRouter, uiBoots
 
 // load config
 let context = require.context('./config/', true, /.js$/);
-context.keys().forEach( path => {
-  demoApp.config(context(path));
+context.keys().forEach( key => {
+  demoApp.config(context(key));
 });
 
 // load view controllers
@@ -33,14 +33,14 @@ context.keys().forEach( key => {
   demoApp.controller(name, context(key));
 });
 
-// load services 
+// load services
 context = require.context('./service/', true, /.js$/);
 context.keys().forEach( key => {
   let name = camelcase(path.basename(key, '.js'));
   demoApp.service(name, context(key));
 });
 
-// load components 
+// load components
 context = require.context('./component/', true, /.js$/);
 context.keys().forEach( key => {
   let name = camelcase(path.basename(key, '.js'));

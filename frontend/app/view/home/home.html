@@ -1,20 +1,9 @@
 <main class="home">
   <h1>Hitting Home Page</h1>
   <create-gallery></create-gallery>
-  <ul>
-    <li ng-repeat="gallery in homeCtrl.galleries">
-      <p> {{gallery.name}} </p>
-      <p> {{gallery.desc}} </p>
-      <p> {{gallery._id}} </p>
-      <button ng-click="delete">Delete</button>
-      <form
-        name="updateForm"
-        ng-submit="//call update with gallery._id, updateForm"
-        novalidate>
-        <input name="name" type="text" placeholder="name">
-        <input name="desc" type="text" placeholder="description">
-        <button> update </button>
-      </form>
-    </li>
-  </ul>
+  <nav class="gallery-list-container">
+    <ul>
+      <gallery-li ng-repeat=" item in homeCtrl.galleries" gallery="item"> </gallery-li>
+    </ul>
+  </nav>
 </main>

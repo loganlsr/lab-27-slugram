@@ -13,7 +13,7 @@ function SignupController($log, $location, authService){
       $location.path('/home');
     })
     .catch ( () => {
-      console.log('failed to login');
+      console.log('Failed to login');
     });
   };
 }
