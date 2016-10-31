@@ -1,19 +1,27 @@
 'use strict';
 
+require('./_login.scss');
+
 module.exports = {
   template: require('./login.html'),
-  controller: ['$log', '$location', 'authService', SignupController],
+  controller: ['$log', '$location', 'authService', LoginController],
   controllerAs: 'loginCtrl',
 };
 
-function SignupController($log, $location, authService){
-  this.login = function(user){
-    authService.login(user)
-    .then( () => {
-      $location.path('/home');
-    })
-    .catch ( () => {
-      console.log('Failed to login');
+function LoginController($log, $location, authService){
+  $log.debug('init loginCtrl');
+
+   //if there is a token goto /home
+  authService.getToken()
+  .then(() => {
+    $location.url('/home');
+  });
+
+  this.login = function(){
+    $log.log('loginCtrl.login()');
+    authService.login(this.user)
+    .then(() => {
+      $location.url('/home');
     });
   };
 }

@@ -3,23 +3,25 @@
 module.exports = ['$q', '$log', '$http', '$window', authService];
 
 function authService($q, $log, $http, $window){
-  $log.debug('init auth service');
+  $log.debug('init authService');
+  // create service
   let service = {};
   let token = null;
 
   function setToken(_token){
     $log.debug('authService.setToken()');
-    if (! _token) return $q.reject(new Error('no token'));
+    if (! _token)
+      return $q.reject(new Error('no token'));
     $window.localStorage.setItem('token', _token);
     token = _token;
     return $q.resolve(token);
   }
 
   service.getToken = function(){
-    $log.debug('authService.getToken()');
+    $log.debug('authService.getToken');
     if (token) return $q.resolve(token);
     token = $window.localStorage.getItem('token');
-    if(token) return $q.resolve(token);
+    if (token) return $q.resolve(token);
     return $q.reject(new Error('token not found'));
   };
 
@@ -30,9 +32,10 @@ function authService($q, $log, $http, $window){
     return $q.resolve();
   };
 
-  service.signup = function(user){
+  service.signup = function(user) {
     $log.debug('authService.signup()');
     let url = `${__API_URL__}/api/signup`;
+    console.log('signup url', url);
 
     let config = {
       headers: {
@@ -40,12 +43,14 @@ function authService($q, $log, $http, $window){
         'Accept': 'application/json',
       },
     };
+
     return $http.post(url, user, config)
-    .then ( res => {
+    .then( res => {
       $log.log('success', res.data);
+      // res.data is the response body aka the token
       return setToken(res.data);
     })
-    .catch( err => {
+    .catch(err => {
       $log.error('fail', err.message);
       return $q.reject(err);
     });
@@ -54,6 +59,7 @@ function authService($q, $log, $http, $window){
   service.login = function(user){
     $log.debug('authService.login()');
     let url = `${__API_URL__}/api/login`;
+    // base64 encoded 'username:password'
     let base64 = $window.btoa(`${user.username}:${user.password}`);
 
     let config = {
@@ -64,7 +70,7 @@ function authService($q, $log, $http, $window){
     };
 
     return $http.get(url, config)
-    .then ( res => {
+    .then( res => {
       $log.log('success', res.data);
       return setToken(res.data);
     })
@@ -74,5 +80,6 @@ function authService($q, $log, $http, $window){
     });
   };
 
+  // return service
   return service;
 }
