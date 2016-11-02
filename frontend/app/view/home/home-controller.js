@@ -2,11 +2,11 @@
 
 require('./_home.scss');
 
-module.exports = ['$log', '$rootscope', 'galleryService', HomeController];
+module.exports = ['$log', '$rootScope', 'galleryService', HomeController];
 
-function HomeController($log, $rootscope, galleryService){
+function HomeController($log, $rootScope, galleryService){
   $log.debug('init homeCtrl');
-  this.galleries = {};
+  this.galleries = [];
 
   this.fetchGalleries = function(){
     galleryService.fetchGalleries()
@@ -25,7 +25,7 @@ function HomeController($log, $rootscope, galleryService){
 
   this.fetchGalleries();
 
-  $rootscope.$on('$locationChangeSuccess', () => {
+  $rootScope.$on('$locationChangeSuccess', () => {
     this.fetchGalleries();
   });
 }

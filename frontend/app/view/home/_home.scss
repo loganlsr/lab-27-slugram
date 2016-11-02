@@ -1,6 +1,11 @@
 @import "theme";
 
 .home {
+  h1 {
+    color: $app-primary;
+  }
+
+  color: $app-primary;
   .gallery-list-container {
     width: 15%;
     background-color: $app-info;
