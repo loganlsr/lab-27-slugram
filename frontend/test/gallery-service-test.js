@@ -5,12 +5,18 @@ describe('testing gallery service', function(){
   //           that mocks the service.
   beforeEach(() => {
     angular.mock.module('demoApp');
-    angular.mock.inject((authService, galleryService, $httpBackend) => {
+    angular.mock.inject((authService, galleryService, $httpBackend, $rootScope) => {
+      this.$rootScope = $rootScope;
       this.authService = authService;
       authService.setToken('1234');
       this.galleryService = galleryService;
       this.$httpBackend = $httpBackend;
     });
+  });
+
+  afterEach(() => {
+    this.authService.setToken(null);
+    this.$window.localStorage.clear();
   });
 
   describe('test galleryService.createGallery method', () => {
@@ -38,10 +44,11 @@ describe('testing gallery service', function(){
       });
 
       this.$httpBackend.flush();
+      this.$rootScope.$apply();
     });
   });
 
-  describe('test galleryService.createGallery method', () => {
+  describe('test galleryService.fetchGalleries method', () => {
     it('should return a gallery', () => {
       let galleryData = {
         name: 'exampleGallery',
@@ -66,6 +73,7 @@ describe('testing gallery service', function(){
       });
 
       this.$httpBackend.flush();
+      this.$rootScope.$apply();
     });
   });
 
@@ -86,6 +94,7 @@ describe('testing gallery service', function(){
       this.galleryService.deleteGalleries(galleryID);
 
       this.$httpBackend.flush();
+      this.$rootScope.$apply();
     });
   });
     //
