@@ -5,8 +5,9 @@ describe('testing gallery service', function(){
   //           that mocks the service.
   beforeEach(() => {
     angular.mock.module('demoApp');
-    angular.mock.inject((authService, galleryService, $httpBackend, $rootScope) => {
+    angular.mock.inject((authService, $window, galleryService, $httpBackend, $rootScope) => {
       this.$rootScope = $rootScope;
+      this.$window = $window;
       this.authService = authService;
       authService.setToken('1234');
       this.galleryService = galleryService;
@@ -92,6 +93,37 @@ describe('testing gallery service', function(){
       .respond(204);
 
       this.galleryService.deleteGalleries(galleryID);
+
+      this.$httpBackend.flush();
+      this.$rootScope.$apply();
+    });
+  });
+
+  describe('test galleryService.updateGallery(galleryID)', () => {
+
+    it('should succeed in deleting a gallery', () => {
+      let galleryID = 'helloworld';
+
+      let galleryData = {
+        name: 'updatedName',
+        desc: 'updatedDesc',
+      };
+
+      let headers = {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer 1234',
+        Accept: 'application/json',
+      };
+
+      this.$httpBackend.expectPUT('http://localhost:3000/api/gallery/helloworld', galleryData, headers)
+      .respond(200, {_id: 'helloworld', name: 'updatedName', desc: 'updatedDesc', pics: []});
+
+      this.galleryService.updateGalleries(galleryID, galleryData)
+      .then( gallery => {
+        expect(gallery._id).toBe(galleryID);
+        expect(gallery.name).toBe(galleryData.name);
+        expect(gallery.desc).toBe(galleryData.desc);
+      });
 
       this.$httpBackend.flush();
       this.$rootScope.$apply();
