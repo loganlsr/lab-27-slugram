@@ -42,6 +42,9 @@ describe('testing #updateGallery', () => {
     };
 
     let url = 'http://localhost:3000/api/gallery/12345';
+    this.$httpBackend.expectPUT(url, {_id: '12345', name: 'newName', desc: 'newDescription'}, headers)
+    .respond(200);
+
     let headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -50,9 +53,6 @@ describe('testing #updateGallery', () => {
 
     let editGalleryCtrl = this.$componentController('editGallery', null, mockBindings);
     editGalleryCtrl.gallery.name = 'new name';
-
-    this.$httpBackend.expectPUT(url, {_id: '12345', name: 'new name', desc: 'description'}, headers)
-    .respond(200);
 
     editGalleryCtrl.updateGallery();
 
